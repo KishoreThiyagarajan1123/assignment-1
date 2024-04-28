@@ -151,7 +151,7 @@ def playlistdetails(id1):
                       publishedat=item['snippet']['publishedAt'],
                       videocount=item['contentDetails']['itemCount'])
             alldata.append(data)
-        nextpagetoken=response4.get('nextPageToken')
+            nextpagetoken=response4.get('nextPageToken')
         if nextpagetoken is None:
                break
     return alldata
@@ -277,23 +277,6 @@ def tables():
     return 'tables created successfully' 
 
 
-Tables = tables()
-
-def channel_table():
-    df1=st.dataframe(get_channel_info,index=[0])
-    return df1
-
-def playlist_table():
-   df= st.dataframe(get_playlist_info)
-   return df
-
-def comment_table():
-    df4=st.dataframe(get_comment_info)
-    return df4
-
-def video_table():
-    df3=st.dataframe(videodetails)
-    return df3
 
 with st.sidebar:
     st.title(":red[youtube data haversting and warehousing]")
@@ -306,29 +289,15 @@ with st.sidebar:
 id1 = st.text_input("enter the channel id")
 
 if st.button("collect and store data"):
-    ch_id=[]
-    ch_id.append(get_channel_info['channelid'])
-    if id1 in ch_id:
-        st.success('channel details of the given channel id already exists')
-    else:
-        insert= channeldetails(id1)
-        st.success(insert)   
+        insert= channeldetails()
+        st.success(insert) 
+        Tables=tables()
+        st.success(Tables)
 
 
-if st.button('migrate to MySQL'):
-    Tables=tables()
-    st.success(Tables)
 
-showtable = st.radio('select the table for view',('channel3','playlist','comments','video'))
 
-if showtable=='channel3':
-    createtabe()
-elif showtable == 'playlist':
-    playlist_table()
-elif showtable == 'comments':
-    comment_table()
-elif showtable == 'video':
-    video_table()
+
 
 
 db=mysql.connector.connect(
